@@ -128,7 +128,7 @@ inline int read_env(struct mmc *mmc, unsigned long size,
 
 	blk_start = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
 	blk_cnt   = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
-
+      
 	n = mmc->block_dev.block_read(mmc_env_devno, blk_start,
 					blk_cnt, (uchar *)buffer);
 
@@ -139,13 +139,10 @@ void env_relocate_spec(void)
 {
 #if !defined(ENV_IS_EMBEDDED)
 	struct mmc *mmc = find_mmc_device(mmc_env_devno);
-
 	if (init_mmc_for_env(mmc))
 		return;
-
 	if (read_env(mmc, CONFIG_ENV_SIZE, CONFIG_ENV_OFFSET, env_ptr))
 		return use_default();
-
 	if (crc32(0, env_ptr->data, ENV_SIZE) != env_ptr->crc)
 		return use_default();
 

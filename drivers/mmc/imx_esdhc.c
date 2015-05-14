@@ -563,8 +563,7 @@ static void esdhc_set_ios(struct mmc *mmc)
 
 	/* Set the bus width */
 	tmp = readl(&regs->proctl) & (~(PROCTL_DTW_4 | PROCTL_DTW_8));
-	writel(tmp, &regs->proctl);
-
+	writel(tmp, &regs->proctl);      
 	if (mmc->bus_width == 4) {
 		tmp = readl(&regs->proctl) | PROCTL_DTW_4;
 		writel(tmp, &regs->proctl);
@@ -685,7 +684,8 @@ int fsl_esdhc_initialize(bd_t *bis, struct fsl_esdhc_cfg *cfg)
 	if (caps & ESDHC_HOSTCAPBLT_VS33)
 		mmc->voltages |= MMC_VDD_32_33 | MMC_VDD_33_34;
 
-	mmc->host_caps = MMC_MODE_4BIT;
+	//mmc->host_caps = MMC_MODE_4BIT;
+	mmc->host_caps = MMC_MODE_8BIT;
 
 	if (caps & ESDHC_HOSTCAPBLT_HSS)
 		mmc->host_caps |= MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_HC;
@@ -695,9 +695,13 @@ int fsl_esdhc_initialize(bd_t *bis, struct fsl_esdhc_cfg *cfg)
 	*/
 #ifndef CONFIG_MX50_ENABLE_USDHC_SDR
 	if (cfg->is_usdhc)
-		mmc->host_caps |= EMMC_MODE_4BIT_DDR;
+	{
+           //mmc->host_caps |= EMMC_MODE_4BIT_DDR;
+           mmc->host_caps |= EMMC_MODE_8BIT_DDR;          	   
+	}
 
 #ifdef CONFIG_EMMC_DDR_PORT_DETECT
+
 	if (detect_mmc_emmc_ddr_port(cfg))
 		mmc->host_caps |= EMMC_MODE_4BIT_DDR;
 #endif
@@ -710,7 +714,7 @@ int fsl_esdhc_initialize(bd_t *bis, struct fsl_esdhc_cfg *cfg)
 		mmc->f_max = MIN(mxc_get_clock(MXC_ESDHC_CLK), 208000000);
 		mmc->tuning_max = USDHC_TUNE_CTRL_MAX;
 		mmc->tuning_min = USDHC_TUNE_CTRL_MIN;
-		mmc->tuning_step = USDHC_TUNE_CTRL_STEP;
+		mmc->tuning_step = USDHC_TUNE_CTRL_STEP;		
 	}
 
 	if (cfg->port_supports_uhs18v)
@@ -726,7 +730,6 @@ int fsl_esdhc_initialize(bd_t *bis, struct fsl_esdhc_cfg *cfg)
 			mmc->host_caps |= EMMC_MODE_8BIT_DDR;
 	}
 #endif
-
 	return 0;
 }
 

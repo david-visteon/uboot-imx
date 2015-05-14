@@ -241,7 +241,7 @@ void set_default_env(void)
 
 void env_relocate (void)
 {
-	DEBUGF ("%s[%d] offset = 0x%lx\n", __FUNCTION__,__LINE__,
+DEBUGF("%s[%d] offset = 0x%lx\n", __FUNCTION__,__LINE__,
 		gd->reloc_off);
 
 #ifdef CONFIG_AMIGAONEG3SE

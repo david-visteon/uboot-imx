@@ -59,14 +59,22 @@ to_imx_spi_flash(struct spi_flash *flash)
 }
 
 static const struct imx_spi_flash_params imx_spi_flash_table[] = {
-	{
-		.idcode1		= 0x20,
-		.block_size		= SZ_64K,
-		.block_count		= 64,
-		.device_size		= SZ_64K * 64,
-		.page_size		= 256,
-		.name			= "M25P32 - 4MB",
-	},
+		{
+			.idcode1				= 0x01,
+			.block_size				= SZ_64K,
+			.block_count			= 128,
+			.device_size			= SZ_64K * 128,
+			.page_size				= 256,
+			.name					= "s25fl064p",
+		},
+        {
+			.idcode1                = 0xc2,
+			.block_size             = SZ_64K,
+			.block_count            = 128,
+			.device_size            = SZ_64K * 128,
+			.page_size              = 256,
+			.name                   = "MX25L6445E",
+        },
 };
 
 static s32 spi_nor_cmd_1byte(struct spi_flash *flash, u8 cmd)

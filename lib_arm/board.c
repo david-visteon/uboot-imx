@@ -177,14 +177,14 @@ static int init_baudrate (void)
 static int display_banner (void)
 {
 	printf ("\n\n%s\n\n", version_string);
-	debug ("U-Boot code: %08lX -> %08lX  BSS: -> %08lX\n",
+	printf ("U-Boot code: %08lX -> %08lX  BSS: -> %08lX\n",
 	       _armboot_start, _bss_start, _bss_end);
 #ifdef CONFIG_MODEM_SUPPORT
 	debug ("Modem Support enabled\n");
 #endif
 #ifdef CONFIG_USE_IRQ
-	debug ("IRQ Stack: %08lx\n", IRQ_STACK_START);
-	debug ("FIQ Stack: %08lx\n", FIQ_STACK_START);
+	printf ("IRQ Stack: %08lx\n", IRQ_STACK_START);
+	printf ("FIQ Stack: %08lx\n", FIQ_STACK_START);
 #endif
 
 	return (0);
@@ -201,13 +201,14 @@ static int display_dram_config (void)
 {
 	int i;
 
-#ifdef DEBUG
+//#ifdef DEBUG
 	puts ("RAM Configuration:\n");
 
 	for(i=0; i<CONFIG_NR_DRAM_BANKS; i++) {
 		printf ("Bank #%d: %08lx ", i, gd->bd->bi_dram[i].start);
 		print_size (gd->bd->bi_dram[i].size, "\n");
 	}
+/*	
 #else
 	ulong size = 0;
 
@@ -217,7 +218,7 @@ static int display_dram_config (void)
 	puts("DRAM:  ");
 	print_size(size, "\n");
 #endif
-
+*/
 	return (0);
 }
 

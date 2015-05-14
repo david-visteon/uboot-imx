@@ -70,6 +70,7 @@ int do_bootm_linux(int flag, int argc, char *argv[], bootm_headers_t *images)
 	char *commandline = getenv ("bootargs");
 #endif
 
+    printf( "command line: %s is being passed to the kernel\n", commandline );
 	if ((flag != 0) && (flag != BOOTM_STATE_OS_GO))
 		return 1;
 
@@ -81,10 +82,10 @@ int do_bootm_linux(int flag, int argc, char *argv[], bootm_headers_t *images)
 		printf ("Using machid 0x%x from environment\n", machid);
 	}
 
+    printf ( "## Passing machid: 0x%08x - %d\n", machid, machid );
 	show_boot_progress (15);
 
-	debug ("## Transferring control to Linux (at address %08lx) ...\n",
-	       (ulong) theKernel);
+    printf( "## Transferring control to Linux (at address %08lx) ...\n", ( ulong )theKernel );
 
 #if defined (CONFIG_SETUP_MEMORY_TAGS) || \
     defined (CONFIG_CMDLINE_TAG) || \

@@ -92,5 +92,33 @@ void mxc_iomux_set_gpr_register(int group, int start_bit, int num_bits, int valu
 void mxc_iomux_v3_init(void *iomux_v3_base)
 {
 	base = iomux_v3_base;
+	void* regptr;
+	u32 ud = 0x00000015;
+	regptr = (void *) 0x020E00AC;
+	__raw_writel(ud, regptr);
+
+	ud = 0x00800000;
+	regptr = (void *) 0x020A4004;
+	__raw_writel(ud, regptr);
+
+	ud = 0x00800000;
+	regptr = (void *) 0x020A4000;
+	__raw_writel(ud, regptr);
+
+	//vip reset
+      ud = 0x00000015;
+	regptr = (void *) 0x020E01FC;
+	__raw_writel(ud, regptr);
+
+       //GDIR
+	ud = 0x00000080;
+	regptr = (void *) 0x020A8004;
+	__raw_writel(ud, regptr);
+
+      //DR
+	ud = 0x00000000;
+	regptr = (void *) 0x020A8000;
+	__raw_writel(ud, regptr);
+	
 }
 

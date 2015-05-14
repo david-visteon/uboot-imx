@@ -168,7 +168,7 @@ struct mmc *find_mmc_device(int dev_num)
 
 	list_for_each(entry, &mmc_devices) {
 		m = list_entry(entry, struct mmc, link);
-
+            // printf("m->block_dev.dev=%d\n",m->block_dev.dev);
 		if (m->block_dev.dev == dev_num)
 			return m;
 	}
@@ -1288,7 +1288,6 @@ int mmc_startup(struct mmc *mmc)
 				break;
 		}
 	}
-
 	/* divide frequency by 10, since the mults are 10x bigger */
 	freq = fbase[(cmd.response[0] & 0x7)];
 	mult = multipliers[((cmd.response[0] >> 3) & 0xf)];
@@ -1386,6 +1385,7 @@ int mmc_startup(struct mmc *mmc)
 		return err;
 
 	/* Restrict card's capabilities by what the host can do */
+	//printf("mmc->card_caps=0x%0x,mmc->host_caps=%0x\n",mmc->card_caps,mmc->host_caps);
 	mmc->card_caps &= mmc->host_caps;
 
 	if (IS_SD(mmc)) {
@@ -1412,6 +1412,7 @@ int mmc_startup(struct mmc *mmc)
 
 		/* Switch the card and host to UHS-I modes, if available */
 		if (mmc->uhs18v) {
+			printf("uhs 18v\n");
 			err = sd_uhsi_mode_select(mmc);
 			if (err)
 				return err;
@@ -1435,6 +1436,7 @@ int mmc_startup(struct mmc *mmc)
 
 			sd_uhsi_tuning(mmc);
 		} else {
+		      printf("non 1v8 mmc->card_caps=%0x\n",mmc->card_caps);
 			if (mmc->card_caps & MMC_MODE_HS)
 				mmc_set_clock(mmc, 50000000);
 			else
@@ -1450,6 +1452,7 @@ int mmc_startup(struct mmc *mmc)
 					EXT_CSD_BUS_WIDTH_4_DDR);
 			} else {
 				/* Set the card to use 4 bit*/
+				printf("set the card to use 4bit \n");
 				err = mmc_switch(mmc, EXT_CSD_CMD_SET_NORMAL,
 					EXT_CSD_BUS_WIDTH,
 					EXT_CSD_BUS_WIDTH_4);
@@ -1457,7 +1460,7 @@ int mmc_startup(struct mmc *mmc)
 
 			if (err)
 				return err;
-
+                   printf("set bus to 4 bit width\n");
 			mmc_set_bus_width(mmc, 4);
 		} else if (mmc->card_caps & MMC_MODE_8BIT) {
 			if (mmc->card_caps & EMMC_MODE_8BIT_DDR) {
@@ -1597,7 +1600,7 @@ int mmc_init(struct mmc *mmc)
 			return UNUSABLE_ERR;
 		}
 	}
-
+      printf("mmc_init -->mmc_startup\n");
 	err = mmc_startup(mmc);
 	if (err)
 		mmc->has_init = 0;

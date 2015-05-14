@@ -195,23 +195,35 @@ serial_puts (const char *s)
  */
 int serial_init (void)
 {
-	__REG(UART_PHYS + UCR1) = 0x0;
-	__REG(UART_PHYS + UCR2) = 0x0;
+    __REG( UART_PHYS + UCR1 ) = 0x0000;
+    __REG( UART_PHYS + UCR2 ) = 0x0000;
 
-	while (!(__REG(UART_PHYS + UCR2) & UCR2_SRST));
+    while ( !( __REG(UART_PHYS + UCR2 ) & UCR2_SRST ));
 
-	__REG(UART_PHYS + UCR3) = 0x0704;
-	__REG(UART_PHYS + UCR4) = 0x8000;
-	__REG(UART_PHYS + UESC) = 0x002b;
-	__REG(UART_PHYS + UTIM) = 0x0;
+    __REG( UART_PHYS + UCR3 ) = 0x0704;
+    __REG( UART_PHYS + UCR4 ) = 0x8000;
+    __REG( UART_PHYS + UFCR ) = 0x0801;
+    __REG( UART_PHYS + UESC ) = 0x002b;
+    __REG( UART_PHYS + UTIM ) = 0x0000;
 
-	__REG(UART_PHYS + UTS) = 0x0;
+    __REG( UART_PHYS + UTS )  = 0x0000;
 
-	serial_setbrg();
+    __REG( UART_PHYS + UFCR ) = 0x0a01;
 
-	__REG(UART_PHYS + UCR2) = UCR2_WS | UCR2_IRTS | UCR2_RXEN | UCR2_TXEN | UCR2_SRST;
+/*    serial_setbrg( ); use Volans settings  */
+    /* UART_CLK_ROOT is 80 mhz with a ref div of 2 = 40 mhz
+     * a bmr/bir ratio of 21.701 = ( 115200 * 16 )
+     */
+    __REG( UART_PHYS + UBIR ) = 0x03e7;
 
-	__REG(UART_PHYS + UCR1) = UCR1_UARTEN;
+    __REG( UART_PHYS + UBMR ) = 0x54c5;
 
-	return 0;
+    __REG( UART_PHYS + UCR2 ) = UCR2_WS | UCR2_IRTS | UCR2_RXEN | UCR2_TXEN | UCR2_SRST;
+
+    __REG( UART_PHYS + UCR1 ) = UCR1_UARTEN;
+
+
+    serial_puts( "U-Boot start...\n" );
+
+    return 0;
 }

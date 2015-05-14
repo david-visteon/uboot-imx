@@ -46,6 +46,19 @@
 #define CMD_M25PXX_DP		0xb9	/* Deep Power-down */
 #define CMD_M25PXX_RES		0xab	/* Release from DP, and Read Signature */
 
+#define CMD_S25FLXX_READ        0x03    /* Read Data Bytes */
+#define CMD_S25FLXX_FAST_READ   0x0b    /* Read Data Bytes at Higher Speed */
+#define CMD_S25FLXX_READID      0x90    /* Read Manufacture ID and Device ID */
+#define CMD_S25FLXX_WREN        0x06    /* Write Enable */
+#define CMD_S25FLXX_WRDI        0x04    /* Write Disable */
+#define CMD_S25FLXX_RDSR        0x05    /* Read Status Register */
+#define CMD_S25FLXX_WRSR        0x01    /* Write Status Register */
+#define CMD_S25FLXX_PP          0x02    /* Page Program */
+#define CMD_S25FLXX_SE          0xd8    /* Sector Erase */
+#define CMD_S25FLXX_BE          0xc7    /* Bulk Erase */
+#define CMD_S25FLXX_DP          0xb9    /* Deep Power-down */
+#define CMD_S25FLXX_RES         0xab    /* Release from DP, and Read Signature */
+
 #define STM_ID_M25P16		0x15
 #define STM_ID_M25P20		0x12
 #define STM_ID_M25P32		0x16
@@ -53,6 +66,7 @@
 #define STM_ID_M25P64		0x17
 #define STM_ID_M25P80		0x14
 #define STM_ID_M25P128		0x18
+#define STM_ID_S25FL064P	0x17
 
 #define STMICRO_SR_WIP		(1 << 0)	/* Write-in-Progress */
 
@@ -118,6 +132,13 @@ static const struct stmicro_spi_flash_params stmicro_spi_flash_table[] = {
 		.pages_per_sector = 256,
 		.nr_sectors = 16,
 		.name = "M25P80",
+	},
+	{
+		.idcode1 = STM_ID_M25P80,
+		.page_size = 256,
+		.pages_per_sector = 256,
+		.nr_sectors = 16,
+		.name = "S25FL064P",
 	},
 	{
 		.idcode1 = STM_ID_M25P128,
