@@ -135,7 +135,7 @@
 			"root=/dev/mmcblk0p2 rootwait\0"                \
 		"bootcmd_mmc=run bootargs_base bootargs_mmc; "   \
 		"mmc dev 0; "	\
-		"mmc read ${loadaddr} 0x1000 0x2000; bootm\0"	\
+		"mmc read ${loadaddr} 0x800 0x2000; bootm\0"	\
 		"bootcmd=run bootcmd_mmc\0"                             
 
 
