@@ -996,7 +996,7 @@ int board_init(void)
 
 	/* board id for linux */
 	//gd->bd->bi_arch_number = MACH_TYPE_MX6Q_SABREAUTO;
-	gd->bd->bi_arch_number = MACH_TYPE_MX6Q_ARM2;
+	gd->bd->bi_arch_number = MACH_TYPE_MX6Q_VISTEON_SX5;
 
 	/* address of boot parameters */
 	gd->bd->bi_boot_params = PHYS_SDRAM_1 + 0x100;
