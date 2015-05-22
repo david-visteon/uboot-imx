@@ -110,6 +110,11 @@ iomux_v3_cfg_t ecspi_pads[] = {
 	MX6Q_PAD_EIM_OE__ECSPI2_MISO,
 	MX6Q_PAD_EIM_RW__ECSPI2_SS0,		/*DO_VIP_CS#*/
 };
+
+iomux_v3_cfg_t wdi_pads[] = {
+	MX6Q_PAD_EIM_D23__GPIO_3_23,           /* DO_WDI_DISABLE */
+};
+
 void iomux_init(void)
 {
 	mxc_iomux_v3_setup_multiple_pads( mx6q_uart_pads, ARRAY_SIZE( mx6q_uart_pads));	
@@ -121,4 +126,5 @@ void iomux_init(void)
 	mxc_iomux_v3_setup_multiple_pads( mx6q_usb_pads, ARRAY_SIZE( mx6q_usb_pads));
 	mxc_iomux_v3_setup_multiple_pads( mx6q_ipu_pads, ARRAY_SIZE( mx6q_ipu_pads));
 	mxc_iomux_v3_setup_multiple_pads( ecspi_pads, ARRAY_SIZE( ecspi_pads));
+	mxc_iomux_v3_setup_multiple_pads( wdi_pads, ARRAY_SIZE( wdi_pads));
 }

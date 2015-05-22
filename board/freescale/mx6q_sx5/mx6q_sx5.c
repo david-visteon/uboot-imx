@@ -112,12 +112,14 @@ vidinfo_t panel_info;
 extern void iomux_init(void);
 extern void iomux_gpio_init(void);
 
+typedef enum { false = 0, true = 1 } bool;
+
 static inline void setup_boot_device(void)
 {
 	uint soc_sbmr = readl(SRC_BASE_ADDR + 0x4);
 	uint bt_mem_ctl = (soc_sbmr & 0x000000FF) >> 4 ;
 	uint bt_mem_type = (soc_sbmr & 0x00000008) >> 3;
-      //printf("#################  sbmr = 0x%x\n",soc_sbmr);
+
 	switch (bt_mem_ctl) {
 	case 0x0:
 		if (bt_mem_type)
@@ -149,6 +151,20 @@ static inline void setup_boot_device(void)
 		boot_dev = UNKNOWN_BOOT;
 		break;
 	}
+}
+
+static void reset_wtd(bool is_reset)
+{
+	u32 data;
+	data = 0x00800000;
+	writel(data, (GPIO3_BASE_ADDR + GPIO_GDIR));
+
+	if (is_reset) {
+		data = 0x00800000;
+	} else {
+		data = 0x0;
+	}
+	writel(data, (GPIO3_BASE_ADDR + GPIO_DR));
 }
 
 enum boot_device get_boot_device(void)
@@ -990,6 +1006,7 @@ int board_init(void)
 {
 	mxc_iomux_v3_init((void *)IOMUXC_BASE_ADDR);
 	iomux_init();
+	reset_wtd(true);
 	
 	setup_boot_device();
 	fsl_set_system_rev();
@@ -1109,46 +1126,6 @@ int mx6_rgmii_rework(char *devname, int phy_addr)
 }
 #endif
 
-#if 0
-#if defined CONFIG_MX6Q
-iomux_v3_cfg_t enet_pads[] = {
-	MX6Q_PAD_KEY_COL1__ENET_MDIO,
-	MX6Q_PAD_KEY_COL2__ENET_MDC,
-	MX6Q_PAD_RGMII_TXC__ENET_RGMII_TXC,
-	MX6Q_PAD_RGMII_TD0__ENET_RGMII_TD0,
-	MX6Q_PAD_RGMII_TD1__ENET_RGMII_TD1,
-	MX6Q_PAD_RGMII_TD2__ENET_RGMII_TD2,
-	MX6Q_PAD_RGMII_TD3__ENET_RGMII_TD3,
-	MX6Q_PAD_RGMII_TX_CTL__ENET_RGMII_TX_CTL,
-	MX6Q_PAD_ENET_REF_CLK__ENET_TX_CLK,
-	MX6Q_PAD_RGMII_RXC__ENET_RGMII_RXC,
-	MX6Q_PAD_RGMII_RD0__ENET_RGMII_RD0,
-	MX6Q_PAD_RGMII_RD1__ENET_RGMII_RD1,
-	MX6Q_PAD_RGMII_RD2__ENET_RGMII_RD2,
-	MX6Q_PAD_RGMII_RD3__ENET_RGMII_RD3,
-	MX6Q_PAD_RGMII_RX_CTL__ENET_RGMII_RX_CTL,
-};
-#elif defined CONFIG_MX6DL
-iomux_v3_cfg_t enet_pads[] = {
-	MX6DL_PAD_KEY_COL1__ENET_MDIO,
-	MX6DL_PAD_KEY_COL2__ENET_MDC,
-	MX6DL_PAD_RGMII_TXC__ENET_RGMII_TXC,
-	MX6DL_PAD_RGMII_TD0__ENET_RGMII_TD0,
-	MX6DL_PAD_RGMII_TD1__ENET_RGMII_TD1,
-	MX6DL_PAD_RGMII_TD2__ENET_RGMII_TD2,
-	MX6DL_PAD_RGMII_TD3__ENET_RGMII_TD3,
-	MX6DL_PAD_RGMII_TX_CTL__ENET_RGMII_TX_CTL,
-	MX6DL_PAD_ENET_REF_CLK__ENET_TX_CLK,
-	MX6DL_PAD_RGMII_RXC__ENET_RGMII_RXC,
-	MX6DL_PAD_RGMII_RD0__ENET_RGMII_RD0,
-	MX6DL_PAD_RGMII_RD1__ENET_RGMII_RD1,
-	MX6DL_PAD_RGMII_RD2__ENET_RGMII_RD2,
-	MX6DL_PAD_RGMII_RD3__ENET_RGMII_RD3,
-	MX6DL_PAD_RGMII_RX_CTL__ENET_RGMII_RX_CTL,
-};
-#endif
-#endif
-
 void enet_board_init(void)
 {
 	//mxc_iomux_v3_setup_multiple_pads(enet_pads,ARRAY_SIZE(enet_pads));
@@ -1237,30 +1214,5 @@ void udc_pins_setting(void)
 
 	mxc_iomux_set_gpr_register(1, 13, 1, 0);
 
-}
-#endif
-
-#ifdef CONFIG_ANDROID_RECOVERY
-
-#define GPIO_VOL_DN_KEY IMX_GPIO_NR(5, 14)
-
-int check_recovery_cmd_file(void)
-{
-	int button_pressed = 0;
-	int recovery_mode = 0;
-
-	recovery_mode = check_and_clean_recovery_flag();
-
-	/* Check Recovery Combo Button press or not. */
-	mxc_iomux_v3_setup_pad(MX6X_IOMUX(PAD_DISP0_DAT20__GPIO_5_14));
-
-	gpio_direction_input(GPIO_VOL_DN_KEY);
-
-	if (gpio_get_value(GPIO_VOL_DN_KEY) == 0) { /* VOL_DN key is low assert */
-		button_pressed = 1;
-		printf("Recovery key pressed\n");
-	}
-
-	return recovery_mode || button_pressed;
 }
 #endif
