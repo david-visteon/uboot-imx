@@ -167,6 +167,12 @@ static void reset_wtd(bool is_reset)
 	writel(data, (GPIO3_BASE_ADDR + GPIO_DR));
 }
 
+static void otg_host_setting(void)
+{
+	mxc_iomux_v3_setup_pad(MX6X_IOMUX(PAD_ENET_RX_ER__ANATOP_USBOTG_ID));
+	mxc_iomux_set_gpr_register(1, 13, 1, 0);
+}
+
 enum boot_device get_boot_device(void)
 {
 	return boot_dev;
@@ -1007,6 +1013,7 @@ int board_init(void)
 	mxc_iomux_v3_init((void *)IOMUXC_BASE_ADDR);
 	iomux_init();
 	reset_wtd(true);
+	otg_host_setting();
 	
 	setup_boot_device();
 	fsl_set_system_rev();
@@ -1133,7 +1140,7 @@ void enet_board_init(void)
 
 int checkboard(void)
 {
-	printf("Board: %s-SX5: %s Board: 0x%x [",
+	printf("Board: %s-SX5-mfg: %s Board: 0x%x [",
 	mx6_chip_name(),
 	mx6_board_rev_name(),
 	fsl_system_rev);
@@ -1190,29 +1197,3 @@ int checkboard(void)
 	}
 	return 0;
 }
-
-#ifdef CONFIG_IMX_UDC
-#define SABREAUTO_MAX7310_1_BASE_ADDR	IMX_GPIO_NR(8, 0)
-#define SABREAUTO_MAX7310_2_BASE_ADDR	IMX_GPIO_NR(8, 8)
-#define SABREAUTO_MAX7310_3_BASE_ADDR	IMX_GPIO_NR(8, 16)
-
-#define SABREAUTO_IO_EXP_GPIO1(x)	(SABREAUTO_MAX7310_1_BASE_ADDR + (x))
-#define SABREAUTO_IO_EXP_GPIO2(x)	(SABREAUTO_MAX7310_2_BASE_ADDR + (x))
-#define SABREAUTO_IO_EXP_GPIO3(x)	(SABREAUTO_MAX7310_3_BASE_ADDR + (x))
-
-#define SABREAUTO_USB_HOST1_PWR		SABREAUTO_IO_EXP_GPIO2(7)
-#define SABREAUTO_USB_OTG_PWR		SABREAUTO_IO_EXP_GPIO3(1)
-
-void udc_pins_setting(void)
-{
-	mxc_iomux_v3_setup_pad(MX6X_IOMUX(PAD_ENET_RX_ER__ANATOP_USBOTG_ID));
-
-	/* USB_OTG_PWR = 0 */
-	gpio_direction_output(SABREAUTO_USB_OTG_PWR, 0);
-	/* USB_H1_POWER = 1 */
-	gpio_direction_output(SABREAUTO_USB_HOST1_PWR, 1);
-
-	mxc_iomux_set_gpr_register(1, 13, 1, 0);
-
-}
-#endif
