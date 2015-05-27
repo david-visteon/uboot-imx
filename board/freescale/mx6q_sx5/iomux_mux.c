@@ -5,9 +5,14 @@
 #include <asm/arch/iomux-v3.h>
 
 iomux_v3_cfg_t mx6q_uart_pads[] = {
-	
-	MX6Q_PAD_GPIO_7__UART2_TXD,		/* DO_TX_DEBUG */
-	MX6Q_PAD_GPIO_8__UART2_RXD,		/* DI_RX_DEBUG */	
+	MX6Q_PAD_EIM_D24__UART3_TXD,            /* DO_TX_NMEA */
+	MX6Q_PAD_EIM_D25__UART3_RXD,            /* DI_RX_NMEA */
+	MX6Q_PAD_CSI0_DAT12__UART4_TXD,         /* DO_UART4_BT_TXD_4Mbps */
+	MX6Q_PAD_CSI0_DAT13__UART4_RXD,         /* DI_UART4_BT_RXD_4Mbps */
+	MX6Q_PAD_CSI0_DAT16__UART4_RTS,         /* DI_UART4_BT_RTS */
+	MX6Q_PAD_CSI0_DAT17__UART4_CTS,         /* DO_UART4_BT_CTS */
+	MX6Q_PAD_GPIO_7__UART2_TXD,             /* DO_TX_DEBUG */
+	MX6Q_PAD_GPIO_8__UART2_RXD,             /* DI_RX_DEBUG */
 };
 
 iomux_v3_cfg_t mx6q_audio_pads[] = {
@@ -115,6 +120,11 @@ iomux_v3_cfg_t wdi_pads[] = {
 	MX6Q_PAD_EIM_D23__GPIO_3_23,           /* DO_WDI_DISABLE */
 };
 
+iomux_v3_cfg_t ccm_clko_pads[] = {
+	MX6Q_PAD_CSI0_MCLK__CCM_CLKO,        /* CLK_WL 32.768KHz */
+};
+
+
 void iomux_init(void)
 {
 	mxc_iomux_v3_setup_multiple_pads( mx6q_uart_pads, ARRAY_SIZE( mx6q_uart_pads));	
@@ -127,4 +137,5 @@ void iomux_init(void)
 	mxc_iomux_v3_setup_multiple_pads( mx6q_ipu_pads, ARRAY_SIZE( mx6q_ipu_pads));
 	mxc_iomux_v3_setup_multiple_pads( ecspi_pads, ARRAY_SIZE( ecspi_pads));
 	mxc_iomux_v3_setup_multiple_pads( wdi_pads, ARRAY_SIZE( wdi_pads));
+	mxc_iomux_v3_setup_multiple_pads( ccm_clko_pads, ARRAY_SIZE( ccm_clko_pads));
 }
