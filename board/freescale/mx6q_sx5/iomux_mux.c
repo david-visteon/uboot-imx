@@ -10,39 +10,16 @@ iomux_v3_cfg_t mx6q_uart_pads[] = {
 	MX6Q_PAD_CSI0_DAT12__UART4_TXD,         /* DO_UART4_BT_TXD_4Mbps */
 	MX6Q_PAD_CSI0_DAT13__UART4_RXD,         /* DI_UART4_BT_RXD_4Mbps */
 	MX6Q_PAD_CSI0_DAT16__UART4_RTS,         /* DI_UART4_BT_RTS */
-	MX6Q_PAD_CSI0_DAT17__UART4_CTS,         /* DO_UART4_BT_CTS */
+	MX6Q_PAD_CSI0_DAT17__UART4_CTS_DCE,  /* DO_UART4_BT_CTS */
 	MX6Q_PAD_GPIO_7__UART2_TXD,             /* DO_TX_DEBUG */
 	MX6Q_PAD_GPIO_8__UART2_RXD,             /* DI_RX_DEBUG */
 };
 
 iomux_v3_cfg_t mx6q_audio_pads[] = {
-	/* DO_AUDIO_GAIN5 */
-	/* DI_MIC_SENSE_UC */
-	/* DO_MIC_ENABLE_UP */
-	/* DI_MIC_ERROR# */
-	/* DO_I2S_CELL_AUD6_TXC */
-	/* DO_I2S_CELL_AUD6_TXD */
-	/* DO_I2S_CELL_AUD6_TXFS */
-	/* DI_I2S_CELL_AUD6_RXD */
-	/* DO_MONO_OUT_ENABLE */
-	/* DO__STEREO_OUT_ENABLE */
-	/* DI_I2S_HDMI_AUD3_TXC_1V8 */
-	/* DI_I2S_HDMI_AUD3_TXFS */
-	/* DI_I2S_HDMI_AUD3_RXD */
-	/* DO_AUDIO_GAIN0 */
-	/* DO_AUDIO_GAIN1 */
-	/* DO_AUDIO_GAIN2 */
-	/* DO_AUDIO_GAIN3 */
-	/* DO_AUDIO_GAIN4 */
-	MX6Q_PAD_DISP0_DAT16__AUDMUX_AUD5_TXC,  /* CLK_I2S_BT_AUD5_TXC_512KHZ  */
-	MX6Q_PAD_DISP0_DAT17__AUDMUX_AUD5_TXD,  /* DO_I2S_BT_AUD_TXD           */
-	MX6Q_PAD_DISP0_DAT18__AUDMUX_AUD5_TXFS, /* CLK_I2S_BT_AUD5_TXFS_16KHZ  */
-	MX6Q_PAD_DISP0_DAT19__AUDMUX_AUD5_RXD,  /* DI_I2S_BT_AUD5_RXD          */
-	MX6Q_PAD_DISP0_DAT20__AUDMUX_AUD4_TXC,  /* CLK_CODEC_BCLK_1536KHZ      */
-	MX6Q_PAD_DISP0_DAT21__AUDMUX_AUD4_TXD,  /* DO_I2S_CODEC_DATOUT         */
-	MX6Q_PAD_DISP0_DAT22__AUDMUX_AUD4_TXFS, /* CLK_CODEC_WCLK_48KHZ        */
-	MX6Q_PAD_DISP0_DAT23__AUDMUX_AUD4_RXD,  /* DI_I2S_CODEC_DATIN          */
-	MX6Q_PAD_NANDF_CS2__CCM_CLKO2,          /* CLK_COEC_MCLK_12.288MHz     */
+	MX6Q_PAD_DISP0_DAT20__AUDMUX_AUD4_TXC,   /* CLK_CODEC_BCLK_1536KHZ      */
+	MX6Q_PAD_DISP0_DAT21__AUDMUX_AUD4_TXD,   /* DO_I2S_CODEC_DATOUT         */
+	MX6Q_PAD_DISP0_DAT22__AUDMUX_AUD4_TXFS,  /* CLK_CODEC_WCLK_48KHZ        */
+	MX6Q_PAD_DISP0_DAT23__AUDMUX_AUD4_RXD,   /* DI_I2S_CODEC_DATIN          */	
 };
 
 iomux_v3_cfg_t mx6q_pwm_pads[] = {
@@ -128,7 +105,7 @@ iomux_v3_cfg_t ccm_clko_pads[] = {
 void iomux_init(void)
 {
 	mxc_iomux_v3_setup_multiple_pads( mx6q_uart_pads, ARRAY_SIZE( mx6q_uart_pads));	
-	//mxc_iomux_v3_setup_multiple_pads( mx6q_audio_pads, ARRAY_SIZE(mx6q_audio_pads ));
+	mxc_iomux_v3_setup_multiple_pads( mx6q_audio_pads, ARRAY_SIZE(mx6q_audio_pads ));
 	//mxc_iomux_v3_setup_multiple_pads( mx6q_pwm_pads, ARRAY_SIZE( mx6q_pwm_pads));
 	mxc_iomux_v3_setup_multiple_pads( mx6q_usdhc2_pads, ARRAY_SIZE( mx6q_usdhc2_pads));
 	mxc_iomux_v3_setup_multiple_pads( mx6q_usdhc3_pads, ARRAY_SIZE( mx6q_usdhc3_pads));
