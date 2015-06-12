@@ -125,17 +125,19 @@
 #define CONFIG_PRIME	"FEC0"
 
 #define CONFIG_LOADADDR		0x10800000	/* loadaddr env var */
-#define CONFIG_RD_LOADADDR	(CONFIG_LOADADDR + 0x400000)
+#define CONFIG_RD_LOADADDR	0x12000000
 
 #define	CONFIG_EXTRA_ENV_SETTINGS					\
 		"uboot=u-boot.bin\0"			\
 		"kernel=uImage\0"				\
-		"bootargs_base=setenv bootargs console=ttymxc1,115200  loglevel=7 \0"\
-		"bootargs_mmc=setenv bootargs ${bootargs} "     \
-			"root=/dev/mmcblk0p2 rootwait\0"                \
+		"initrd=uramdisk\0"				\
+		"bootargs_base=setenv bootargs initrd=0x12000040,0x800000 console=ttymxc1,115200 \0" \
+		"bootargs_mmc=setenv bootargs ${bootargs} \0"     \
 		"bootcmd_mmc=run bootargs_base bootargs_mmc; "   \
 		"mmc dev 0; "	\
-		"mmc read ${loadaddr} 0x800 0x2000; bootm\0"	\
+		"mmc read ${loadaddr} 0x800 0x2000; "	\
+		"mmc read ${rd_loadaddr} 0x2800 0x4000; " \
+		"bootm\0"	\
 		"bootcmd=run bootcmd_mmc\0"                             
 
 
