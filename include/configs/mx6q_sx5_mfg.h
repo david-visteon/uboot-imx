@@ -129,7 +129,7 @@
 #define CONFIG_RD_LOADADDR	(CONFIG_LOADADDR + 0x400000)
 
 
-#define CONFIG_BOOTARGS             "rdinit=/linuxrc initrd=0x10C00000,0x420000 console=ttymxc1,115200 lpj=8495104 ldb=sin0 loglevel=7 "
+#define CONFIG_BOOTARGS             "rdinit=/linuxrc initrd=0x10C00000,0x420000 console=ttymxc1,115200 lpj=8495104 loglevel=7 "
 #define CONFIG_BOOTCOMMAND      "bootm"
 
 #define CONFIG_ARP_TIMEOUT	200UL
